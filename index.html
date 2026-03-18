@@ -31,7 +31,7 @@
     }
 
     .logo {
-      max-width: 360px;
+      max-width: 260px;
       width: 100%;
       height: auto;
       display: inline-block;
@@ -82,7 +82,7 @@
       }
 
       .logo {
-        max-width: 280px;
+        max-width: 220px;
       }
     }
 
@@ -214,10 +214,10 @@
 </head>
 <body>
   <div class="container">
-   <div class="logo-wrap">
- <img src="logo2.png" class="logo" alt="Funny Future Plans Logo" />
-</div>
-    
+    <div class="logo-wrap">
+      <img src="logo.png" class="logo" alt="Funny Future Plans Logo" />
+    </div>
+
     <div id="homeScreen">
       <h1>Career Story Lab</h1>
       <p class="subtitle">
@@ -395,8 +395,8 @@ Turns out "winging it" is not a career plan.`
     let currentAnswers = [];
 
     function fillTemplate(template, answers) {
-      return template.replace(/\{(\d+)\}/g, (_, index) => {
-        return answers[Number(index)] ?? "";
+      return template.replace(/\{(\d+)\}/g, function(_, index) {
+        return answers[Number(index)] || "";
       });
     }
 
@@ -415,21 +415,23 @@ Turns out "winging it" is not a career plan.`
       const grid = document.getElementById("storyGrid");
       grid.innerHTML = "";
 
-      stories.forEach(story => {
+      stories.forEach(function(story) {
         const card = document.createElement("div");
         card.className = "story-card";
-        card.innerHTML = `
-          <h3>${story.id}. ${story.title}</h3>
-          <p>${story.intro}</p>
-          <div class="small">${story.prompts.length} prompts</div>
-          <button class="primary-btn" onclick="openStory(${story.id})">Open Story</button>
-        `;
+        card.innerHTML =
+          "<h3>" + story.id + ". " + story.title + "</h3>" +
+          "<p>" + story.intro + "</p>" +
+          "<div class='small'>" + story.prompts.length + " prompts</div>" +
+          "<button class='primary-btn' onclick='openStory(" + story.id + ")'>Open Story</button>";
         grid.appendChild(card);
       });
     }
 
     function openStory(id) {
-      currentStory = stories.find(s => s.id === id);
+      currentStory = stories.find(function(s) {
+        return s.id === id;
+      });
+
       currentAnswers = new Array(currentStory.prompts.length).fill("");
 
       document.getElementById("storyTitle").textContent = currentStory.title;
@@ -438,12 +440,11 @@ Turns out "winging it" is not a career plan.`
       const container = document.getElementById("promptContainer");
       container.innerHTML = "";
 
-      currentStory.prompts.forEach((prompt, index) => {
+      currentStory.prompts.forEach(function(prompt, index) {
         const wrapper = document.createElement("div");
-        wrapper.innerHTML = `
-          <label for="prompt_${index}">Prompt ${index + 1}: ${prompt}</label>
-          <input id="prompt_${index}" type="text" />
-        `;
+        wrapper.innerHTML =
+          "<label for='prompt_" + index + "'>Prompt " + (index + 1) + ": " + prompt + "</label>" +
+          "<input id='prompt_" + index + "' type='text' />";
         container.appendChild(wrapper);
       });
 
@@ -454,12 +455,15 @@ Turns out "winging it" is not a career plan.`
       if (!currentStory) return;
 
       const answers = [];
+
       for (let i = 0; i < currentStory.prompts.length; i++) {
-        const value = document.getElementById(\"prompt_" + i).value.trim();
+        const value = document.getElementById("prompt_" + i).value.trim();
+
         if (!value) {
-          alert(\`Please answer Prompt \${i + 1} before generating the story.\`);
+          alert("Please answer Prompt " + (i + 1) + " before generating the story.");
           return;
         }
+
         answers.push(value);
       }
 
@@ -470,8 +474,8 @@ Turns out "winging it" is not a career plan.`
 
       document.getElementById("resultTitle").textContent = currentStory.title;
       document.getElementById("storyOutput").textContent = finishedStory;
-      document.getElementById("quoteText").textContent = \`"\${quote.text}"\`;
-      document.getElementById("quoteAuthor").textContent = \`— \${quote.author}\`;
+      document.getElementById("quoteText").textContent = "\"" + quote.text + "\"";
+      document.getElementById("quoteAuthor").textContent = "— " + quote.author;
 
       showScreen("resultScreen");
     }
@@ -481,7 +485,7 @@ Turns out "winging it" is not a career plan.`
 
       showScreen("formScreen");
 
-      currentStory.prompts.forEach((_, index) => {
+      currentStory.prompts.forEach(function(_, index) {
         const input = document.getElementById("prompt_" + index);
         if (input) {
           input.value = currentAnswers[index] || "";
