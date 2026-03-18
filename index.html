@@ -455,7 +455,7 @@ Turns out "winging it" is not a career plan.`
 
       const answers = [];
       for (let i = 0; i < currentStory.prompts.length; i++) {
-        const value = document.getElementById(\`prompt_\${i}\`).value.trim();
+        const value = document.getElementById(\"prompt_" + i).value.trim();
         if (!value) {
           alert(\`Please answer Prompt \${i + 1} before generating the story.\`);
           return;
@@ -482,7 +482,7 @@ Turns out "winging it" is not a career plan.`
       showScreen("formScreen");
 
       currentStory.prompts.forEach((_, index) => {
-        const input = document.getElementById(\`prompt_\${index}\`);
+        const input = document.getElementById("prompt_" + index);
         if (input) {
           input.value = currentAnswers[index] || "";
         }
